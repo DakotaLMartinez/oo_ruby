@@ -169,7 +169,7 @@ Let's take a look at initialize:
 class Dog 
   attr_accessor :name
   def initialize(name)
-    self.name = name # this is not the same as self.name = name
+    self.name = name 
   end
 
   def name=(name)
@@ -191,7 +191,12 @@ Dog.new("fido")
 Even classes are instances of the Class class. 
 You can invoke `methods` on any object to see what it knows how to respond to. 
 
-You can invoke `respond_to?` with a symbol argument (method name) to see if that object responds to that method. 
+You can invoke `respond_to?` with a method name as an argument (method name can be a string or a symbol) to see if that object responds to that method. 
+
+```
+Dog.respond_to?("name") || 
+Dog.respond_to?(:name)
+```
 
 You can invoke `class` on any object to see what class built it and what docs to look at  for reference.
 
