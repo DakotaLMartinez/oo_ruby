@@ -20,16 +20,24 @@ Refers to a particular example of a class (we call an object built by a class an
 ### Initialize method
 ```rb
 class Dog 
+  
+end
+```
+if we try to do 
+```
+Dog.new("Fido")
+```
+we'll get an argument error. To fix this, we need to add an initialize method that will be invoked when we call .new on the class.
+
+```rb
+class Dog 
   def initialize(name)
     puts name
   end
 end
 ```
-and try to do 
-```
-Dog.new("Fido")
-```
-we get an argument error.
+Now, we'll be able to create a Dog that has a name like so/: `Dog.new("fido")`
+
 ### Getter and setter
 In javascript we can get and set values on an object with dot notation without defining methods.
 In ruby, we actually need to define that interface. If we want to get a dog's name, we need to define a method for that:
@@ -50,8 +58,20 @@ class Dog
   end
 end
 ```
+Now, we'll be able to access the name like so: 
+
+```rb
+fido = Dog.new("fido")
+fido.name # => "fido"
+```
 ### Attribute Macros
 
+Instead of having to define all of these setters and getters manually, we can use attribute macros to handle the task for us.
+| Concept | Syntax | Usage |
+|---|---|---|
+| getter | `attr_reader :name` | When you want to allow read-only access to an attribute |
+| setter | `attr_writer :name` | When you want to allow writing to an attribute but not reading (very rare) |
+| both | `attr_accessor :name`  | When you want both a getter and setter method for the corresponding attribute |
 ```rb
 class Dog 
   def initialize(name)
@@ -66,6 +86,16 @@ class Dog
   end
   # attr_writer :name => defines this setter method
   def name=(name)
+    @name = name
+  end
+end
+```
+Refactored to use the `attr_accessor` macro, we'd have this:
+
+```rb
+class Dog 
+  attr_accessor :name
+  def initialize(name)
     @name = name
   end
 end
@@ -77,38 +107,23 @@ Class methods => called on a Class (defined on the class – still within, but w
 
 ```rb
 class Dog 
+  attr_accessor :name
   def initialize(name)
     @name = name
   end
-
-  # attr_accessor :name => defines both of the below methods
-
-  # attr_reader :name => defines this getter method
-  def name 
-    @name
+  
+  # defined on the class itself (self refers to the Dog class here)
+  def self.class_method
+    puts self # will print out the Dog class itself.
   end
-  # attr_writer :name => defines this setter method
-  def name=(name)
-    @name = name
-  end
-end
-```
-
-#### Class methods are defined on the class:
-
-```rb
-class Dog
-  def self.all 
-    puts self # will refer to the Dog class
-    @@all
-  end
-
-  def name
-    puts self # will refer to the instance we invoked .name on
-    @name
+  
+  # defined within the class but not *on* it (self refers to the particular dog we invoke `instance_method` on)
+  def instance_method
+    puts self # will print out the Dog instance we invoked `instance_method` on.
   end
 end
 ```
+
 ### The `self` Keyword
 a reference to the receiving object of a method call.
 If you see self within a method, it will refer to the object the method was called on.
@@ -119,18 +134,21 @@ class Dog
     @name = name
   end
 
-  # attr_accessor :name => defines both of the below methods
-
-  # attr_reader :name => defines this getter method
   def name 
     puts self
     @name
   end
-  # attr_writer :name => defines this setter method
-  def name=(name)
-    @name = name
-  end
 end
+```
+If we created a dog and called name on it below, we'd see the dog instance printed to the console.
+```rb
+2.6.6 :030 > fido = Dog.new("fido")
+ => #<Dog:0x00007ffc3b9983d0 @name="fido"> 
+2.6.6 :031 > fido.name
+#<Dog:0x00007ffc3b9983d0>
+ => "fido" 
+```
+
 ```
 ### Variable Scopes
 
@@ -184,8 +202,6 @@ Dog.new("fido")
 ```
 ## Learning Tasks
 
-### Understanding Variable Scope
-
 ### Everything in Ruby is An Object – What does this mean?
 
 Even classes are instances of the Class class. 
@@ -234,7 +250,7 @@ If we add additional attributes to the class, we don't need to change our argume
 
 Why is this important?
 
-If we change the number of arguments that initialize accepts, we have to update all of our calls to Dog.new in the program.
+If we change the number of arguments that `initialize` accepts, we have to update all of our calls to Dog.new in the program.
 
 We can also do dynamic assignment of instance variables.
 
