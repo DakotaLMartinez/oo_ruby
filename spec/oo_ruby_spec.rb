@@ -35,16 +35,18 @@ RSpec.describe Episode do
 
   describe ".get_all" do
     it "returns an array of all the episodes within the friends hash" do 
-      expect(Episode.all).to be_a(Array)
+      Episode.class_variable_set('@@all', [])
+      expect(Episode.get_all).to be_a(Array)
       expect(Episode.all.size).to eq(236)
-      expect(Episode.all.first).to be_a(Episode)
-      expect(Episode.all.first.name).to eq("The One Where Monica Gets a Roommate")
-      expect(Episode.all.last.name).to eq("The Last One,\n  Part 2")
+      expect(Episode.get_all.first).to be_a(Episode)
+      expect(Episode.get_all.first.name).to eq("The One Where Monica Gets a Roommate")
+      expect(Episode.get_all.last.name).to eq("The Last One,\n  Part 2")
     end
   end
 
   describe ".all" do 
     it "returns an array of all of the episodes that have been created" do 
+      Episode.class_variable_set('@@all', [])
       expect(Episode.all.length).to eq(0)
       Episode.get_all
       expect(Episode.all.length).to eq(236)

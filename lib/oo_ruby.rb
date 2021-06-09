@@ -1,3 +1,4 @@
+require "pry"
 require "oo_ruby/version"
 require "oo_ruby/friends"
 require "oo_ruby/episode"
