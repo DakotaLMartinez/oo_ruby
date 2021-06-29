@@ -4,12 +4,12 @@
 ## Key Concepts
 
 ### Class
-built in classes:
-Boolean
-Integer
-Array
-String
-Hash
+examples of built in classes:
+- Boolean
+- Integer
+- Array
+- String
+- Hash
 
 If we want to find information about any of these types of objects, we can look at the ruby docs for the appropriate class.
 
@@ -20,11 +20,32 @@ This refers to a particular example of a class. So the class describes the patte
 
 #### Dog example
 
-In JS, we don't need to add methods to access properties of an object, but in ruby we do. Interacting with an object requires a method call. And if the method doesn't exist, we'll get a NoMethodError
+In JS, we don't need to add methods to access properties of an object, but in ruby we do. Interacting with an object requires a method call. And if the method doesn't exist, we'll get a NoMethodError.
+
+### Initialize method
+
+This is like the constructor method in a JS class. This method runs whenever you invoke `.new` on a class. If you need/want to pass arguments when you invoke `.new`, then you need to define an initialize method.
+
+If we want to be able to do something like:
+
+```rb
+f = Dog.new("fido")
+```
+
+Then you need something like this:
 
 ```rb
 class Dog 
-  # floppy ears (true/false)
+  def initialize(name)
+    puts name
+  end
+end
+```
+
+But what if we want to keep track of the name over time?
+
+```rb
+class Dog 
   def initialize(name)
     puts name
   end
@@ -37,6 +58,8 @@ end
 f = Dog.new("fido")
 f.name
 ```
+
+We see something like this:
 
 ```
 2.6.6 :034 > f.name
@@ -59,7 +82,9 @@ Traceback (most recent call last):
         1: from (irb):30:in `name'
 SystemStackError (stack level too deep)
 ```
-Ruby first looks for a local variable called name, and then if it finds it, will return value. If not, then it will look for a method called name, and invoke that. If there is no explicit receiver (fido.name => fido is the receiver of .name), then ruby will execute the method on `self`. 
+Ruby first looks for a local variable called name, and then if it finds it, will return value. If not, then it will look for a method called name, and invoke that. If there is no explicit receiver (fido.name => fido is the receiver of .name), then ruby will execute the method on `self`.
+
+Since we're already inside of the name method in this case, we're stacking up calls to the `name` method on top of each other. Ruby notices that this is happening and there's no end in sight, so it raises this StackLevelTooDeep error.
 
 ## Self Keyword 
 
@@ -73,7 +98,7 @@ end
 
 Invoking a method from inside of its definition is called recursion. Whenever you do recursion, you have to have an out. That means, some way that the method won't call itself again when some condition is true.
 
-What we want to do is to have the dog remember its name:
+What we want to do is to have the dog remember its name. To do that, we'll use a new kind of variable called an instance variable.x
 
 ```rb
 class Dog 
@@ -162,15 +187,7 @@ class Dog
   end
 end
 ```
-### Initialize method
 
-This is like the constructor method in a JS class. This method runs whenever you invoke `.new` on a class. If you need/want to pass arguments when you invoke `.new`, then you need to define an initialize method.
-
-If we want to be able to do something like:
-
-```rb
-f = Dog.new("fido")
-```
 This invokes the initialize method:
 
 ### Attribute Macros
@@ -348,12 +365,6 @@ class Dog
   end 
 end
 ```
-
-## Learning Tasks
-
-### Understanding Variable Scope
-
-### Everything in Ruby is An Object – What does this mean?
 
 ## Errors
 
