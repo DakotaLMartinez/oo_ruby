@@ -10,5 +10,31 @@ require "oo_ruby"
 # require "pry"
 # Pry.start
 
+class Dog 
+
+  @@all = []
+
+  # a class method that's defined ON the class and called on the class (directly) and self will refer to the class within the method.
+  def self.all
+    @@all
+  end
+
+  attr_accessor :name, :age, :breed
+
+  def initialize(name, age, breed)
+    @name = name # @name is an instance variable
+    @age = age # @age is an instance variable
+    @breed = breed # @breed is an instance variable
+    save(self)
+  end
+
+  # instance method, why? because we call it on an instance – it's also defined inside the class but NOT ON the class.
+  def save
+    @@all << self # adds the receiving dog (the one we call .save on) to the @@all array
+    self
+  end
+
+end
+
 require "irb"
 IRB.start(__FILE__)
